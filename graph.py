@@ -23,6 +23,29 @@ class Graph(nx.MultiDiGraph):
                 print(e)
         nx.MultiDiGraph.__init__(self, graph)
 
+    def get_connected_components_subgraph(self):
+        # 获取连通子图
+        component_list = list()
+        for c in nx.weakly_connected_components(self):
+            component = self.subgraph(c)
+            component_list.append(component)
+        return component_list
+
+
+    """
+        统计每种类型的节点的个数
+        """
+    def node_type_statistic(self):
+        node_type_dict = dict()
+        for n in self.nodes:
+            if self.node[n]['label'] == 'concept':
+                node_type = self.node[n]['type']
+                if node_type not in node_type_dict.keys():
+                    node_type_dict[node_type] = list()
+                node_type_dict[node_type].append(n)
+        # self.node_type_dict = node_type_dict
+        return node_type_dict
+
     def export(self, file_name):
         """将图导出至文件"""
         temp_graph = nx.MultiDiGraph(self)
